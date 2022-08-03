@@ -27,6 +27,18 @@ variable "tags" {
   default     = {}
 }
 
+variable "kms_keys_decrypt" {
+  type        = list(string)
+  description = "The ARNs of the AWS KMS keys that can be used to decrypt data.  Use [\"*\"] to allow all keys."
+  default     = []
+}
+
+variable "kms_keys_encrypt" {
+  type        = list(string)
+  description = "The ARNs of the AWS KMS keys that can be used to encrypt data.  Use [\"*\"] to allow all keys."
+  default     = []
+}
+
 variable "s3_buckets_export" {
   type        = list(string)
   description = "The ARNs of the AWS S3 buckets that data can be exported from.  Use [\"*\"] to allow all buckets."

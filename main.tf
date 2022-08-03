@@ -61,6 +61,44 @@ resource "aws_iam_role" "main" {
 }
 
 data "aws_iam_policy_document" "main" {
+
+  #
+  # KMS / DecryptObjects
+  #
+
+  dynamic "statement" {
+    for_each = length(var.kms_keys_decrypt) > 0 ? [1] : []
+    content {
+      sid = "DecryptObjects"
+      actions = [
+        "kms:ListAliases",
+        "kms:Decrypt",
+      ]
+      effect    = "Allow"
+      resources = var.kms_keys_decrypt
+    }
+  }
+
+  #
+  # KMS / EncryptObjects
+  #
+
+  dynamic "statement" {
+    for_each = length(var.kms_keys_encrypt) > 0 ? [1] : []
+    content {
+      sid = "EncryptObjects"
+      actions = [
+        "kms:Encrypt*",
+        "kms:Decrypt*",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:Describe*"
+      ]
+      effect    = "Allow"
+      resources = var.kms_keys_encrypt
+    }
+  }
+
   #
   # S3 / ListBucket
   #

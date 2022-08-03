@@ -64,6 +64,8 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_assume_role_policy"></a> [assume\_role\_policy](#input\_assume\_role\_policy) | The assume role policy for the AWS IAM role.  If blank, allows Snow Family (fka Import/Export) to assume the role. | `string` | `""` | no |
+| <a name="input_kms_keys_decrypt"></a> [kms\_keys\_decrypt](#input\_kms\_keys\_decrypt) | The ARNs of the AWS KMS keys that can be used to decrypt data.  Use ["*"] to allow all keys. | `list(string)` | `[]` | no |
+| <a name="input_kms_keys_encrypt"></a> [kms\_keys\_encrypt](#input\_kms\_keys\_encrypt) | The ARNs of the AWS KMS keys that can be used to encrypt data.  Use ["*"] to allow all keys. | `list(string)` | `[]` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name of the AWS IAM role. | `string` | n/a | yes |
 | <a name="input_policy_description"></a> [policy\_description](#input\_policy\_description) | The description of the AWS IAM policy. Defaults to "The policy for [NAME]". | `string` | `""` | no |
 | <a name="input_policy_name"></a> [policy\_name](#input\_policy\_name) | The name of the AWS IAM policy.  Defaults to "[NAME]-policy". | `string` | `""` | no |
