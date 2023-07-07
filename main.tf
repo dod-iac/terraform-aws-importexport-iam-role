@@ -132,7 +132,7 @@ data "aws_iam_policy_document" "main" {
         "s3:ListBucket",
         "s3:ListBucketMultipartUploads",
       ]
-      effect = "Allow"
+      effect    = "Allow"
       resources = sort(distinct(var.s3_buckets_import))
     }
   }
