@@ -7,7 +7,7 @@ executors:
   main:
     working_directory: ~/project/
     docker:
-      - image: cimg/base:2021.07
+      - image: cimg/base:2022.09
 
 jobs:
   test:
@@ -15,7 +15,7 @@ jobs:
     steps:
       - checkout
       - terraform/install:
-          terraform_version: 1.2.7
+          terraform_version: 1.3.1
       - run:
           name: "Download and install terraform-docs"
           command: |

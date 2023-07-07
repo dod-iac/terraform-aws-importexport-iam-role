@@ -104,7 +104,7 @@ data "aws_iam_policy_document" "main" {
   #
 
   dynamic "statement" {
-    for_each = length(distinct(flatten([var.s3_buckets_import, var.s3_buckets_export]))) > 0 ? [1] : []
+    for_each = length(distinct(var.s3_buckets_export)) > 0 && length(distinct(flatten([var.s3_buckets_import, var.s3_buckets_export]))) > 0 ? [1] : []
     content {
       sid = "ListBucket"
       actions = [
@@ -118,6 +118,22 @@ data "aws_iam_policy_document" "main" {
         var.s3_buckets_import,
         var.s3_buckets_export
       ])))
+    }
+  }
+
+  dynamic "statement" {
+    for_each = length(distinct(var.s3_buckets_export)) == 0 && length(distinct(var.s3_buckets_import)) > 0 ? [1] : []
+    content {
+      sid = "ListBucket"
+      actions = [
+        "s3:GetBucketLocation",
+        "s3:GetBucketRequestPayment",
+        "s3:GetEncryptionConfiguration",
+        "s3:ListBucket",
+        "s3:ListBucketMultipartUploads",
+      ]
+      effect = "Allow"
+      resources = sort(distinct(var.s3_buckets_import))
     }
   }
 
@@ -144,14 +160,14 @@ data "aws_iam_policy_document" "main" {
   #
 
   dynamic "statement" {
-    for_each = length(var.s3_buckets_import) > 0 ? [1] : []
+    for_each = length(distinct(var.s3_buckets_export)) > 0 && length(distinct(var.s3_buckets_import)) > 0 ? [1] : []
     content {
       sid = "ListBucketMultipartUploads"
       actions = [
         "s3:ListBucketMultipartUploads",
       ]
       effect    = "Allow"
-      resources = var.s3_buckets_import
+      resources = sort(distinct(var.s3_buckets_import))
     }
   }
 
@@ -160,7 +176,7 @@ data "aws_iam_policy_document" "main" {
   #
 
   dynamic "statement" {
-    for_each = length(var.s3_buckets_import) > 0 ? [1] : []
+    for_each = length(distinct(var.s3_buckets_import)) > 0 ? [1] : []
     content {
       sid = "PutObject"
       actions = [
@@ -170,7 +186,7 @@ data "aws_iam_policy_document" "main" {
         "s3:ListMultipartUploadParts"
       ]
       effect    = "Allow"
-      resources = formatlist("%s/*", var.s3_buckets_import)
+      resources = formatlist("%s/*", sort(distinct(var.s3_buckets_import)))
     }
   }
 
